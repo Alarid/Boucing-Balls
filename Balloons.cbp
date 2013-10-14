@@ -29,12 +29,19 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-std=c++0x" />
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="Balloon.cpp" />
-		<Unit filename="Balloon.hpp" />
-		<Unit filename="const.hpp" />
-		<Unit filename="main.cpp" />
+		<Linker>
+			<Add option="-lsfml-graphics" />
+			<Add option="-lsfml-window" />
+			<Add option="-lsfml-system" />
+		</Linker>
+		<Unit filename="src/Balloon.cpp" />
+		<Unit filename="src/Balloon.hpp" />
+		<Unit filename="src/defines.hpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/random.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
