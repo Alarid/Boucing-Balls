@@ -15,29 +15,32 @@ Balloon::Balloon (float posx,float posy,float radius,int sideGuiSize)
 
 	this->sideGuiSize = sideGuiSize;
 
-	int dirx = rand()%2;
-	int diry = rand()%2;
+	int dirx = rand() & 1;
+	int diry = rand() & 1;
+
 	direction.x = dirx ? SPEED : -SPEED;
 	direction.y = diry ? SPEED : -SPEED;
 }
 
-bool Balloon::isClicked(int posX, int posY)
+bool Balloon::isClicked(int posX, int posY) const
 {
 	Vector2f mypos = getPosition();
 	float myradius = getRadius();
-	return (posX > mypos.x && posX < mypos.x+myradius*2 && posY > mypos.y && posY < mypos.y+myradius*2);
+	return ((posX > mypos.x) //TODO , iici la hit box est carée
+            && (posX < mypos.x+myradius*2)
+            && (posY > mypos.y)
+            && (posY < mypos.y+myradius*2));
 }
 
-bool Balloon::isCollided(Balloon b)
+bool Balloon::isCollided(const Balloon& other) const
 {
-	Vector2f bpos = b.getPosition();
-	float bradius = b.getRadius();
-	return isCollided(bpos.x, bpos.y, bradius);
+	const Vector2f& other_pos = other.getPosition();
+	return isCollided(other_pos.x, other_pos.y, other.getRadius());
 }
 
-bool Balloon::isCollided(float posx,float posy,float radius)
+bool Balloon::isCollided(float posx,float posy,float radius) const
 {
-	Vector2f mypos = getPosition();
+	const Vector2f& mypos = getPosition();
 	float myradius = getRadius();
 	if  ((posx >= mypos.x && posx <= (mypos.x + myradius*2)) ||
 		((posx + radius*2) >= mypos.x && (posx + radius*2) <= (mypos.x + myradius*2)) ||
@@ -93,3 +96,8 @@ void Balloon::invertDirection()
 	direction.x = -direction.x;
 	direction.y = -direction.y;
 }
+
+const sf::Vector2f& Balloon::getDirection() const
+{
+    return this->direction;
+};

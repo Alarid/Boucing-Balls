@@ -5,18 +5,14 @@
 #include <vector>
 #include <sstream>
 
-#include "const.hpp"
+#include "defines.hpp"
+#include "random.hpp"
 #include "Balloon.hpp"
 
 using namespace std;
 using namespace sf;
 
 vector<Balloon> balloons;
-
-float rand_FloatRange(float a, float b)
-{
-    return ((b-a)*((float)rand()/RAND_MAX))+a;
-}
 
 void checkCollisions()
 {
@@ -34,8 +30,8 @@ void checkCollisions()
 
             if (balloonDest.isCollided(balloonSource))
             {
-                balloonSource.setDirection(Vector2f(-balloonSource.getDirectionX(), -balloonSource.getDirectionY()));
-                balloonDest.setDirection(Vector2f(-balloonDest.getDirectionX(), -balloonDest.getDirectionY()));
+                balloonSource.setDirection(Vector2f(-balloonSource.getDirection().x, -balloonSource.getDirection().y));
+                balloonDest.setDirection(Vector2f(-balloonDest.getDirection().x, -balloonDest.getDirection().y));
                 balloonSource.move(balloonSource.getDirection());
                 balloonDest.move(balloonDest.getDirection());
             }
@@ -46,8 +42,9 @@ void checkCollisions()
 int main()
 {
     RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Balloons");
-    srand(time(0));
     Clock clock;
+    window.setFramerateLimit(60);
+    rand_init();
 
     // Background GUI
     Texture texture;
@@ -90,16 +87,16 @@ int main()
     // Initialisation des ballons
     for (int i=1; i<=NB_BALLOONS; i++)
     {
-        float size = 0, posX = 0, posY = 0;
+        float size,posX,posY;
         bool found;
 
         // On regénère une position aléatoire tant qu'on tombe sur un ballon déjà à cet endroit
         do
         {
             found = false;
-            size = rand_FloatRange(30, MAX_SIZE);
-            posX = rand_FloatRange(1, WIDTH-size*2);
-            posY = rand_FloatRange(1, HEIGHT-size*2);
+            size = random(30.f, MAX_SIZE);
+            posX = random(1.f, WIDTH-size*2);
+            posY = random(1.f, HEIGHT-size*2);
 
             vector<Balloon>::iterator it = balloons.begin();
             while (it != balloons.end())
@@ -118,34 +115,31 @@ int main()
         balloons.push_back(Balloon(posX, posY, size, sideGui.getSize().x));
     }
 
-
     // Boucle principale
     while (window.isOpen())
     {
         // Gestion des évènements
+        float elapsedTime = clock.getElapsedTime().asSeconds();
         Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed)
+            if ((event.type == Event::Closed) or (event.type == Event::KeyPressed and event.key.code == Keyboard::Escape))
                 window.close();
 
-            if (event.type == Event::MouseButtonPressed)
+            if (event.type == Event::MouseButtonPressed and event.mouseButton.button == Mouse::Left)
             {
-                // Clic gauche de la souris
-                if (event.mouseButton.button == Mouse::Left)
+                // On regarde si un ballon à été cliqué
+                auto it = balloons.begin();
+                while (it != balloons.end())
                 {
-                    // On regarde si un ballon à été cliqué
-                    vector<Balloon>::iterator it = balloons.begin();
-                    while (it != balloons.end())
-                    {
-                        // Si c'est le cas, on l'enlève
-                        if (it->isClicked(event.mouseButton.x, event.mouseButton.y))
-                            it = balloons.erase(it);
-                        else
-                            ++it;
-                    }
+                    // Si c'est le cas, on l'enlève
+                    if (it->isClicked(event.mouseButton.x, event.mouseButton.y))
+                        it = balloons.erase(it);
+                    else
+                        ++it;
                 }
             }
+
         }
 
         window.clear();
@@ -165,15 +159,16 @@ int main()
         window.draw(guiCountdown);
 
         // Déplacements
-        for (vector<Balloon>::iterator it = balloons.begin(); it != balloons.end(); ++it)
-            it->run();
+        for (auto& balloon: balloons)
+            balloon.run();
 
         // Collisions
         checkCollisions();
 
-        // Affichage des ballons
-        for (vector<Balloon>::iterator it = balloons.begin(); it != balloons.end(); ++it)
-            window.draw(*it);
+        // Affichage
+        for (auto& balloon: balloons)
+            window.draw(balloon);
+
 
         window.display();
     }
