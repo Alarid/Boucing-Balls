@@ -60,6 +60,19 @@ int main()
     RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Balloons");
     srand(time(0));
 
+    // Background GUI
+    Texture texture;
+    if (!texture.loadFromFile("img/back.png"))
+    {
+        cout << "Error loading img/back.png" << endl;
+    }
+    texture.setSmooth(true);
+    texture.setRepeated(true);
+    Sprite bg;
+    bg.setTexture(texture);
+    bg.setTextureRect(IntRect(0, 0, WIDTH, HEIGHT));
+    cout << "test" << endl;
+
     // Initialisation des ballons
     for (int i=1; i<=NB_BALLOONS; i++)
     {
@@ -121,6 +134,11 @@ int main()
             }
         }
 
+        window.clear();
+
+        // GUI
+        window.draw(bg);
+
         // Déplacements
         for (vector<Balloon>::iterator it = balloons.begin(); it != balloons.end(); ++it)
             it->run();
@@ -128,8 +146,7 @@ int main()
         // Collisions
         checkCollisions();
 
-        // Affichage
-        window.clear();
+        // Affichage des ballons
         for (vector<Balloon>::iterator it = balloons.begin(); it != balloons.end(); ++it)
             window.draw(*it);
 
