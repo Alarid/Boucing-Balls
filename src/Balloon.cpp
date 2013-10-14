@@ -31,29 +31,17 @@ bool Balloon::isClicked(int posX, int posY) const
 
 bool Balloon::isCollided(const Balloon& other) const
 {
-	const Vector2f& other_pos = other.getPosition();
-	return isCollided(other_pos.x, other_pos.y, other.getRadius());
+    const Vector2f& other_pos = other.getPosition();
+    return isCollided(other_pos.x,other_pos.y,other.getRadius());
 }
 
-bool Balloon::isCollided(float posx,float posy,float radius) const
+bool Balloon::isCollided(float posx, float posy, float radius)const
 {
-	const Vector2f& mypos = getPosition();
-	float myradius = getRadius();
-	if  ((posx >= mypos.x && posx <= (mypos.x + myradius*2)) ||
-		((posx + radius*2) >= mypos.x && (posx + radius*2) <= (mypos.x + myradius*2)) ||
-		(posy > mypos.y && posy <= (mypos.y + myradius*2)) ||
-		((posy + radius*2) >= mypos.y && (posy + radius*2) <= (mypos.y + myradius*2)))
-    {
-        Vector2f myCenter = Vector2f(mypos.x+myradius, mypos.y+myradius);
-        Vector2f otherCenter = Vector2f(posx+radius, posy+radius);
-        float distance = sqrt(
-            ((myCenter.x - otherCenter.x) * (myCenter.x - otherCenter.x)) +
-            ((myCenter.y - otherCenter.y) * (myCenter.y - otherCenter.y))
-        );
-        if (distance <= myradius + radius) return true;
-    }
+	const Vector2f& pos = getPosition();
+	float xd = pos.x - posx;
+	float yd = pos.y - posy;
 
-    return false;
+    return sqrt(xd*xd + yd*yd) <= getRadius() + radius;
 }
 
 void Balloon::run()
