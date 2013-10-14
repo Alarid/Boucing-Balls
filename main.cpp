@@ -33,17 +33,22 @@ void checkCollisions()
 
             if (balloonDest.isCollided(balloonSource))
             {
-                Vector2f firstDir = balloonSource.getDirection();
-                Vector2f secondDir = balloonDest.getDirection();
+//                Vector2f firstDir = balloonSource.getDirection();
+//                Vector2f secondDir = balloonDest.getDirection();
+//
+//                int newVelX = (firstDir.x * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.x)) / (balloonSource.getRadius() + balloonDest.getRadius());
+//                int newVelY = (firstDir.y * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.y)) / (balloonSource.getRadius() + balloonDest.getRadius());
+//                int newVelX2 = (secondDir.x * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.x)) / (balloonDest.getRadius() + balloonSource.getRadius());
+//                int newVelY2 = (secondDir.y * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.y)) / (balloonDest.getRadius() + balloonSource.getRadius());
+//
+//                balloonSource.setDirection(Vector2f(newVelX, newVelY));
+//                balloonSource.move(balloonSource.getDirectionX()*2, balloonSource.getDirectionY()*2);
+//                balloonDest.setDirection(Vector2f(newVelX2, newVelY2));
+//                balloonDest.move(balloonDest.getDirectionX()*2, balloonDest.getDirectionY()*2);
 
-                int newVelX = (firstDir.x * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.x)) / (balloonSource.getRadius() + balloonDest.getRadius());
-                int newVelY = (firstDir.y * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.y)) / (balloonSource.getRadius() + balloonDest.getRadius());
-                int newVelX2 = (secondDir.x * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.x)) / (balloonDest.getRadius() + balloonSource.getRadius());
-                int newVelY2 = (secondDir.y * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.y)) / (balloonDest.getRadius() + balloonSource.getRadius());
-
-                balloonSource.setDirection(Vector2f(newVelX, newVelY));
+                balloonSource.setDirection(Vector2f(-balloonSource.getDirectionX(), -balloonSource.getDirectionY()));
+                balloonDest.setDirection(Vector2f(-balloonDest.getDirectionX(), -balloonDest.getDirectionY()));
                 balloonSource.move(balloonSource.getDirection());
-                balloonDest.setDirection(Vector2f(newVelX2, newVelY2));
                 balloonDest.move(balloonDest.getDirection());
             }
         }

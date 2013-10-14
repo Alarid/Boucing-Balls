@@ -83,6 +83,8 @@ void Balloon::run()
         setPosition(Vector2f(getPosition().x, HEIGHT-myradius));
     }
 
+    direction.x = direction.x;
+    direction.y = direction.y;
 	move(direction);
 }
 
