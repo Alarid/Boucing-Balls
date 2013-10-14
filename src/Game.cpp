@@ -17,7 +17,6 @@ bool Game::run()
     while (Gui::window.isOpen())
     {
     	// Gestion des évènements
-        float elapsedTime = clock.getElapsedTime().asSeconds();
         Event event;
         while (Gui::window.pollEvent(event))
         {
