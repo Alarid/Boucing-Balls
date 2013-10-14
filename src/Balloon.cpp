@@ -26,7 +26,7 @@ bool Balloon::isClicked(int posX, int posY) const
 {
 	Vector2f mypos = getPosition();
 	float myradius = getRadius();
-	return ((posX > mypos.x) //TODO , iici la hit box est carée
+	return ((posX > mypos.x) //TODO , ici la hit box est carée
             && (posX < mypos.x+myradius*2)
             && (posY > mypos.y)
             && (posY < mypos.y+myradius*2));

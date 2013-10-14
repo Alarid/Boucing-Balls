@@ -10,9 +10,9 @@ class Balloon: public sf::CircleShape
     public:
         Balloon(float posx,float posy,float radius,int sideGuiSize);
 
-        bool isClicked(int posx, int posy)const;
-        bool isCollided(const Balloon& other)const;
-        bool isCollided(float posx, float posy, float radius)const;
+        bool isClicked(int posx, int posy) const;
+        bool isCollided(const Balloon& other) const;
+        bool isCollided(float posx, float posy, float radius) const;
 
         void invertDirection();
         void run();
