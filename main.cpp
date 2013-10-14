@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <sstream>
 
 #include "const.hpp"
 #include "Balloon.hpp"
@@ -33,19 +34,6 @@ void checkCollisions()
 
             if (balloonDest.isCollided(balloonSource))
             {
-//                Vector2f firstDir = balloonSource.getDirection();
-//                Vector2f secondDir = balloonDest.getDirection();
-//
-//                int newVelX = (firstDir.x * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.x)) / (balloonSource.getRadius() + balloonDest.getRadius());
-//                int newVelY = (firstDir.y * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.y)) / (balloonSource.getRadius() + balloonDest.getRadius());
-//                int newVelX2 = (secondDir.x * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.x)) / (balloonDest.getRadius() + balloonSource.getRadius());
-//                int newVelY2 = (secondDir.y * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.y)) / (balloonDest.getRadius() + balloonSource.getRadius());
-//
-//                balloonSource.setDirection(Vector2f(newVelX, newVelY));
-//                balloonSource.move(balloonSource.getDirectionX()*2, balloonSource.getDirectionY()*2);
-//                balloonDest.setDirection(Vector2f(newVelX2, newVelY2));
-//                balloonDest.move(balloonDest.getDirectionX()*2, balloonDest.getDirectionY()*2);
-
                 balloonSource.setDirection(Vector2f(-balloonSource.getDirectionX(), -balloonSource.getDirectionY()));
                 balloonDest.setDirection(Vector2f(-balloonDest.getDirectionX(), -balloonDest.getDirectionY()));
                 balloonSource.move(balloonSource.getDirection());
@@ -59,6 +47,7 @@ int main()
 {
     RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Balloons");
     srand(time(0));
+    Clock clock;
 
     // Background GUI
     Texture texture;
@@ -71,7 +60,32 @@ int main()
     Sprite bg;
     bg.setTexture(texture);
     bg.setTextureRect(IntRect(0, 0, WIDTH, HEIGHT));
-    cout << "test" << endl;
+    
+    // Side gui
+    Texture sideGui;
+    if (!sideGui.loadFromFile("img/gui.png"))
+    {
+        cout << "Error loading img/gui.png" << endl;
+    }
+    sideGui.setSmooth(true);
+    sideGui.setRepeated(true);
+    Sprite sideGuiSpr;
+    sideGuiSpr.setTexture(sideGui);
+    sideGuiSpr.setTextureRect(IntRect(0, 0, sideGui.getSize().x, HEIGHT));
+    sideGuiSpr.setPosition(WIDTH-sideGui.getSize().x, 0);
+
+    // GUI font
+    Font font;
+    if (!font.loadFromFile("fonts/gui.ttf"))
+    {
+        cout << "Error loading fonts/gui.ttf" << endl;
+    }
+    Text guiCountdown;
+    guiCountdown.setFont(font);
+    guiCountdown.setString("30");
+    guiCountdown.setCharacterSize(50);
+    guiCountdown.setColor(Color::Black);
+    guiCountdown.setPosition(WIDTH - sideGui.getSize().x/2 - 20, 50);
 
     // Initialisation des ballons
     for (int i=1; i<=NB_BALLOONS; i++)
@@ -101,7 +115,7 @@ int main()
         } while (found && balloons.size() > 0);
 
         // On créé le ballon
-        balloons.push_back(Balloon(posX, posY, size, i));
+        balloons.push_back(Balloon(posX, posY, size, sideGui.getSize().x));
     }
 
 
@@ -136,8 +150,19 @@ int main()
 
         window.clear();
 
+        // Mise à jour du countdown
+        int secs = (int)clock.getElapsedTime().asSeconds();
+        if (secs <= COUNTDOWN)
+        {
+            ostringstream oss;
+            oss << COUNTDOWN - secs;
+            guiCountdown.setString(oss.str());
+        }
+
         // GUI
         window.draw(bg);
+        window.draw(sideGuiSpr);
+        window.draw(guiCountdown);
 
         // Déplacements
         for (vector<Balloon>::iterator it = balloons.begin(); it != balloons.end(); ++it)

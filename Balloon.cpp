@@ -5,7 +5,7 @@
 using namespace std;
 using namespace sf;
 
-Balloon::Balloon (float posx,float posy,float radius,int id)
+Balloon::Balloon (float posx,float posy,float radius,int sideGuiSize)
 {
 	setRadius(radius);
 	setFillColor(sf::Color::Green);
@@ -13,7 +13,7 @@ Balloon::Balloon (float posx,float posy,float radius,int id)
 	setOutlineThickness(3);
 	setPosition(posx, posy);
 
-	this->id = id;
+	this->sideGuiSize = sideGuiSize;
 
 	int dirx = rand()%2;
 	int diry = rand()%2;
@@ -62,10 +62,10 @@ void Balloon::run()
 	float myradius = getRadius() * 2;
 
 	// Si on est en contact ou qu'on a dépassé un des bords de l'écran, on inverse le déplacement
-	if ((mypos.x + myradius) >= WIDTH)
+	if ((mypos.x + myradius) >= (WIDTH-sideGuiSize))
     {
         direction.x = -direction.x;
-        setPosition(Vector2f(WIDTH-myradius, getPosition().y));
+        setPosition(Vector2f(WIDTH-myradius-sideGuiSize, getPosition().y));
     }
     else if (mypos.x <= 0)
     {

@@ -8,7 +8,7 @@
 class Balloon: public sf::CircleShape
 {
     public:
-        Balloon(float posx,float posy,float radius,int id);
+        Balloon(float posx,float posy,float radius,int sideGuiSize);
         bool isClicked(int posx, int posy);
         bool isCollided(Balloon b);
         bool isCollided(float posx, float posy, float radius);
@@ -19,11 +19,10 @@ class Balloon: public sf::CircleShape
         int getDirectionY() { return direction.y; };
         sf::Vector2f getDirection() { return sf::Vector2f(direction.x, direction.y); };
         void setDirection(sf::Vector2f dir) { direction = dir; };
-        int getId() { return id; };
 
     private:
         sf::Vector2f direction;
-        int id;
+        int sideGuiSize;
 };
 
 #endif
