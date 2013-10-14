@@ -127,8 +127,6 @@ int main()
                 }
             }
 
-
-
         }
 
         window.clear();

@@ -37,7 +37,7 @@ bool Balloon::isCollided(const Balloon& other) const
 
 bool Balloon::isCollided(float posx,float posy,float radius) const
 {
-	Vector2f mypos = getPosition();
+	const Vector2f& mypos = getPosition();
 	float myradius = getRadius();
 	if  ((posx >= mypos.x && posx <= (mypos.x + myradius*2)) ||
 		((posx + radius*2) >= mypos.x && (posx + radius*2) <= (mypos.x + myradius*2)) ||
