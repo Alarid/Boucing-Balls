@@ -110,26 +110,25 @@ int main()
         Event event;
         while (window.pollEvent(event))
         {
-            if (event.type == Event::Closed)
+            if ((event.type == Event::Closed) or (event.type == Event::KeyPressed and event.key.code == Keyboard::Escape))
                 window.close();
 
-            if (event.type == Event::MouseButtonPressed)
+            if (event.type == Event::MouseButtonPressed and event.mouseButton.button == Mouse::Left)
             {
-                // Clic gauche de la souris
-                if (event.mouseButton.button == Mouse::Left)
+                // On regarde si un ballon à été cliqué
+                auto it = balloons.begin();
+                while (it != balloons.end())
                 {
-                    // On regarde si un ballon à été cliqué
-                    vector<Balloon>::iterator it = balloons.begin();
-                    while (it != balloons.end())
-                    {
-                        // Si c'est le cas, on l'enlève
-                        if (it->isClicked(event.mouseButton.x, event.mouseButton.y))
-                            it = balloons.erase(it);
-                        else
-                            ++it;
-                    }
+                    // Si c'est le cas, on l'enlève
+                    if (it->isClicked(event.mouseButton.x, event.mouseButton.y))
+                        it = balloons.erase(it);
+                    else
+                        ++it;
                 }
             }
+
+
+
         }
 
         window.clear();
