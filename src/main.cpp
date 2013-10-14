@@ -57,6 +57,19 @@ int main()
     window.setFramerateLimit(60);
     rand_init();
 
+    // Background GUI
+    Texture texture;
+    if (!texture.loadFromFile("img/back.png"))
+    {
+        cout << "Error loading img/back.png" << endl;
+    }
+    texture.setSmooth(true);
+    texture.setRepeated(true);
+    Sprite bg;
+    bg.setTexture(texture);
+    bg.setTextureRect(IntRect(0, 0, WIDTH, HEIGHT));
+    cout << "test" << endl;
+
     // Initialisation des ballons
     for (int i=1; i<=NB_BALLOONS; i++)
     {
@@ -119,6 +132,11 @@ int main()
             }
         }
 
+        window.clear();
+
+        // GUI
+        window.draw(bg);
+
         // Déplacements
         for (auto& balloon: balloons)
             balloon.run();
@@ -130,6 +148,7 @@ int main()
         window.clear();
         for (auto& balloon: balloons)
             window.draw(balloon);
+
 
         window.display();
     }
