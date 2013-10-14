@@ -3,7 +3,7 @@
 using namespace std;
 using namespace sf;
 
-Gui::window = RenderWindow(sf::VideoMode(WIDTH, HEIGHT), "Balloons");
+sf::RenderWindow Gui::window(sf::VideoMode(WIDTH, HEIGHT), "Balloons");
 
 /**
  * Initialisation de la GUI

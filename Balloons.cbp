@@ -39,6 +39,10 @@
 		</Linker>
 		<Unit filename="src/Balloon.cpp" />
 		<Unit filename="src/Balloon.hpp" />
+		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/Game.hpp" />
+		<Unit filename="src/Gui.cpp" />
+		<Unit filename="src/Gui.hpp" />
 		<Unit filename="src/defines.hpp" />
 		<Unit filename="src/main.cpp" />
 		<Unit filename="src/random.hpp" />
