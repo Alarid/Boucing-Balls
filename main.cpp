@@ -19,31 +19,34 @@ float rand_FloatRange(float a, float b)
 
 void checkCollisions()
 {
-    vector<Balloon>::iterator it = balloons.begin();
-    while (it != balloons.end())
+    const unsigned int _size = balloons.size();
+
+    for (unsigned int i = 0; i < _size; ++i)
     {
-        vector<Balloon>::iterator it2 = balloons.begin();
-        while (it2 != balloons.end())
+        Balloon& balloonSource = balloons[i];
+
+        for (unsigned int j = 0; j < _size; ++j)
         {
-            if ((it->getId() != it2->getId()) && it2->isCollided(*it))
+            Balloon& balloonDest = balloons[j];
+
+            if (i == j) continue;
+
+            if (balloonDest.isCollided(balloonSource))
             {
-                Vector2f firstDir = it->getDirection();
-                Vector2f secondDir = it2->getDirection();
+                Vector2f firstDir = balloonSource.getDirection();
+                Vector2f secondDir = balloonDest.getDirection();
 
-                int newVelX = (firstDir.x * (it->getRadius() - it2->getRadius()) + (2 * it2->getRadius() * secondDir.x)) / (it->getRadius() + it2->getRadius());
-                int newVelY = (firstDir.y * (it->getRadius() - it2->getRadius()) + (2 * it2->getRadius() * secondDir.y)) / (it->getRadius() + it2->getRadius());
-                int newVelX2 = (secondDir.x * (it2->getRadius() - it->getRadius()) + (2 * it->getRadius() * firstDir.x)) / (it2->getRadius() + it->getRadius());
-                int newVelY2 = (secondDir.y * (it2->getRadius() - it->getRadius()) + (2 * it->getRadius() * firstDir.y)) / (it2->getRadius() + it->getRadius());
+                int newVelX = (firstDir.x * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.x)) / (balloonSource.getRadius() + balloonDest.getRadius());
+                int newVelY = (firstDir.y * (balloonSource.getRadius() - balloonDest.getRadius()) + (2 * balloonDest.getRadius() * secondDir.y)) / (balloonSource.getRadius() + balloonDest.getRadius());
+                int newVelX2 = (secondDir.x * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.x)) / (balloonDest.getRadius() + balloonSource.getRadius());
+                int newVelY2 = (secondDir.y * (balloonDest.getRadius() - balloonSource.getRadius()) + (2 * balloonSource.getRadius() * firstDir.y)) / (balloonDest.getRadius() + balloonSource.getRadius());
 
-                it->setDirection(Vector2f(newVelX, newVelY));
-                it->move(it->getDirection());
-                it2->setDirection(Vector2f(newVelX2, newVelY2));
-                it2->move(it2->getDirection());
+                balloonSource.setDirection(Vector2f(newVelX, newVelY));
+                balloonSource.move(balloonSource.getDirection());
+                balloonDest.setDirection(Vector2f(newVelX2, newVelY2));
+                balloonDest.move(balloonDest.getDirection());
             }
-
-            it2++;
         }
-        it++;
     }
 }
 
