@@ -12,6 +12,8 @@
 *.la
 *.a
 *.exe
+Balloons
 
 bin/
 obj/
+

@@ -15,7 +15,7 @@ all: $(EXEC)
 	$(CC) $(FLAGS) -o "$@" -c "$<"
 
 
-$(EXEC) : main.cpp Balloon.o Balloon.hpp const.hpp
+$(EXEC) : src/main.cpp src/Balloon.o src/Balloon.hpp src/defines.hpp src/random.hpp
 	$(CC) $^ $(FLAGS) -o $@
 
 
