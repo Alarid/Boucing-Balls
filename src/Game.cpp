@@ -13,7 +13,7 @@ bool Game::run()
 {
 	rand_init();
 
-    Gui::init();
+//    Gui::init();
     Gui::window.setFramerateLimit(60);
 
     initBalloons();
@@ -92,12 +92,15 @@ bool Game::initBalloons()
  */
 bool Game::updateBalloons(const float time)
 {
-	// Déplacements
-    for (auto& balloon: balloons)
-        balloon.run(time);
-
     // Collisions
     checkCollisions();
+
+	// Déplacements
+    for (auto& balloon: balloons)
+    {
+        balloon.run(time);
+        Gui::window.draw(balloon);
+    }
 
     return true;
 }
@@ -117,18 +120,21 @@ bool Game::checkCollisions()
         {
             Balloon& balloonDest = balloons[j];
 
-            if (i == j) continue;
-
             if (balloonDest.isCollided(balloonSource))
             {
+                const Vector2f centerBalloonSource = Vector2f(balloonSource.getPosition().x+balloonSource.getRadius(), balloonSource.getPosition().y+balloonSource.getRadius());
+                const Vector2f centerBalloonDest = Vector2f(balloonDest.getPosition().x+balloonDest.getRadius(), balloonDest.getPosition().y+balloonDest.getRadius());
+                const Vector2f collisionPoint = Vector2f(
+                    ((centerBalloonSource.x * balloonDest.getRadius()) + (centerBalloonDest.x * balloonSource.getRadius())) / (balloonSource.getRadius() + balloonDest.getRadius()),
+                    ((centerBalloonSource.y * balloonDest.getRadius()) + (centerBalloonDest.y * balloonSource.getRadius())) / (balloonSource.getRadius() + balloonDest.getRadius())
+                );
+                cout << Angle(centerBalloonSource, collisionPoint) << endl;
+
+
                 balloonSource.setDirection(Vector2f(-balloonSource.getDirection().x, -balloonSource.getDirection().y));
                 balloonDest.setDirection(Vector2f(-balloonDest.getDirection().x, -balloonDest.getDirection().y));
-                balloonSource.move(balloonSource.getDirection());
-                balloonDest.move(balloonDest.getDirection());
             }
         }
-
-        Gui::window.draw(balloonSource);
     }
 }
 
@@ -141,8 +147,8 @@ bool Game::draw()
     float time = clock.restart().asSeconds();
 
     // Mise à jour et affichage de la GUI
-    Gui::update((int)time);
-    Gui::draw();
+//    Gui::update((int)time);
+//    Gui::draw();
 
     // Mise à jour des ballons
     updateBalloons(time);

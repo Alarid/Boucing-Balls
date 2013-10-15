@@ -10,6 +10,7 @@
 #include "random.hpp"
 #include "Balloon.hpp"
 #include "Gui.hpp"
+#include "Geometry.hpp"
 
 class Game
 {
