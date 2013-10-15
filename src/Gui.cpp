@@ -3,7 +3,13 @@
 using namespace std;
 using namespace sf;
 
-sf::RenderWindow Gui::window(sf::VideoMode(WIDTH, HEIGHT), "Balloons");
+RenderWindow Gui::window(VideoMode(WIDTH, HEIGHT), "Balloons");
+Texture Gui::sideGui;
+Texture Gui::bg;
+Sprite Gui::bgSpr;
+Sprite Gui::sideGuiSpr;
+Font Gui::guiFont;
+Text Gui::guiCountdown;
 
 /**
  * Initialisation de la GUI
@@ -20,7 +26,7 @@ bool Gui::init()
     bg.setRepeated(true);
     bgSpr.setTexture(bg);
     bgSpr.setTextureRect(IntRect(0, 0, WIDTH, HEIGHT));
-    
+
     // Side gui
     if (!sideGui.loadFromFile("img/gui.png"))
     {
@@ -53,13 +59,9 @@ bool Gui::init()
  */
 bool Gui::draw()
 {
-	window.clear();
-
     window.draw(bgSpr);
     window.draw(sideGuiSpr);
     window.draw(guiCountdown);
-
-    window.display();
 
     return true;
 }

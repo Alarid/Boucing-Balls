@@ -3,6 +3,9 @@
 using namespace std;
 using namespace sf;
 
+std::vector<Balloon> Game::balloons;
+Clock Game::clock;
+
 /**
  * Méthode principale du jeu
  */
@@ -12,6 +15,8 @@ bool Game::run()
 
     Gui::init();
     Gui::window.setFramerateLimit(60);
+
+    initBalloons();
 
     // Boucle principale
     while (Gui::window.isOpen())
@@ -36,9 +41,9 @@ bool Game::run()
                         ++it;
                 }
             }
-
-            draw();
         }
+
+        draw();
     }
 
     return true;
@@ -62,7 +67,7 @@ bool Game::initBalloons()
             posX = random(1.f, WIDTH-size*2);
             posY = random(1.f, HEIGHT-size*2);
 
-            vector<Balloon>::iterator it = balloons.begin();
+            auto it = balloons.begin();
             while (it != balloons.end())
             {
                 if (it->isCollided(posX, posY, size))
@@ -130,9 +135,10 @@ bool Game::checkCollisions()
  */
 bool Game::draw()
 {
-	// Mise à jour et affichage de la GUI
-	int secs = (int)clock.getElapsedTime().asSeconds();
-    Gui::update(secs);
+    Gui::window.clear();
+
+    // Mise à jour et affichage de la GUI
+    Gui::update((int)clock.getElapsedTime().asSeconds());
     Gui::draw();
 
     // Mise à jour des ballons
@@ -141,6 +147,8 @@ bool Game::draw()
     // Affichage des ballons
     for (auto& balloon: balloons)
         Gui::window.draw(balloon);
+
+    Gui::window.display();
 
     return true;
 }
