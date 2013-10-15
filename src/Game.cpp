@@ -138,7 +138,7 @@ bool Game::checkCollisions()
 bool Game::draw()
 {
     Gui::window.clear();
-    float time = clock.getElapsedTime().asSeconds();
+    float time = clock.restart().asSeconds();
 
     // Mise à jour et affichage de la GUI
     Gui::update((int)time);

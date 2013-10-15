@@ -51,6 +51,7 @@ void Balloon::run(const float time)
 {
 	Vector2f mypos = getPosition();
 	float myradius = getRadius() * 2;
+	move(direction.x*time, direction.y*time);
 
 	// Si on est en contact ou qu'on a dépassé un des bords de l'écran, on inverse le déplacement
 	if ((mypos.x + myradius) >= (WIDTH-sideGuiSize))
@@ -73,10 +74,6 @@ void Balloon::run(const float time)
         direction.y = -direction.y;
         setPosition(Vector2f(getPosition().x, HEIGHT-myradius));
     }
-
-    direction.x = direction.x;
-    direction.y = direction.y;
-	move(direction);
 }
 
 void Balloon::invertDirection()
