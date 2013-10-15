@@ -25,12 +25,7 @@ Balloon::Balloon (float posx,float posy,float radius,int sideGuiSize)
 
 bool Balloon::isClicked(int posX, int posY) const
 {
-	Vector2f mypos = getPosition();
-	float myradius = getRadius();
-	return ((posX > mypos.x) //TODO , ici la hit box est carée
-            && (posX < mypos.x+myradius*2)
-            && (posY > mypos.y)
-            && (posY < mypos.y+myradius*2));
+	return isCollided(posX,posY,0);
 }
 
 bool Balloon::isCollided(const Balloon& other) const

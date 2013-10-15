@@ -93,14 +93,14 @@ bool Game::initBalloons()
 bool Game::updateBalloons(const float time)
 {
     // Collisions
-    checkCollisions();
 
 	// Déplacements
     for (auto& balloon: balloons)
     {
         balloon.run(time);
-        Gui::window.draw(balloon);
     }
+
+    checkCollisions();
 
     return true;
 }
@@ -135,6 +135,7 @@ bool Game::checkCollisions()
                 balloonDest.setDirection(Vector2f(-balloonDest.getDirection().x, -balloonDest.getDirection().y));
             }
         }
+        Gui::window.draw(balloonSource);
     }
 }
 
