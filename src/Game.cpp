@@ -122,17 +122,20 @@ bool Game::checkCollisions()
 
             if (balloonDest.isCollided(balloonSource))
             {
-                const Vector2f centerBalloonSource = Vector2f(balloonSource.getPosition().x+balloonSource.getRadius(), balloonSource.getPosition().y+balloonSource.getRadius());
-                const Vector2f centerBalloonDest = Vector2f(balloonDest.getPosition().x+balloonDest.getRadius(), balloonDest.getPosition().y+balloonDest.getRadius());
-                const Vector2f collisionPoint = Vector2f(
+                const Vector2f centerBalloonSource(balloonSource.getPosition());
+                const Vector2f centerBalloonDest(balloonDest.getPosition());
+
+                /*const Vector2f collisionPoint(
                     ((centerBalloonSource.x * balloonDest.getRadius()) + (centerBalloonDest.x * balloonSource.getRadius())) / (balloonSource.getRadius() + balloonDest.getRadius()),
                     ((centerBalloonSource.y * balloonDest.getRadius()) + (centerBalloonDest.y * balloonSource.getRadius())) / (balloonSource.getRadius() + balloonDest.getRadius())
-                );
+                );*/
+
+                const Vector2f collisionPoint(((centerBalloonSource * balloonDest.getRadius()) + (centerBalloonDest * balloonSource.getRadius())) / (balloonSource.getRadius() + balloonDest.getRadius()));
                 cout << Angle(centerBalloonSource, collisionPoint) << endl;
 
 
-                balloonSource.setDirection(Vector2f(-balloonSource.getDirection().x, -balloonSource.getDirection().y));
-                balloonDest.setDirection(Vector2f(-balloonDest.getDirection().x, -balloonDest.getDirection().y));
+                balloonSource.setDirection(-balloonSource.getDirection());
+                balloonDest.setDirection(-balloonDest.getDirection());
             }
         }
         Gui::window.draw(balloonSource);
