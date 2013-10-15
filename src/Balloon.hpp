@@ -15,7 +15,7 @@ class Balloon: public sf::CircleShape
         bool isCollided(float posx, float posy, float radius) const;
 
         void invertDirection();
-        void run();
+        void run(const float time);
 
         const sf::Vector2f& getDirection() const;
         void setDirection(sf::Vector2f dir) { direction = dir; };

@@ -18,7 +18,7 @@ class Game
 
 	private:
 		static bool initBalloons();
-		static bool updateBalloons();
+		static bool updateBalloons(const float time);
 		static bool checkCollisions();
 		static bool draw();
 

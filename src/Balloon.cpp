@@ -47,7 +47,7 @@ bool Balloon::isCollided(float posx, float posy, float radius)const
     return sqrt(xd*xd + yd*yd) <= getRadius() + radius;
 }
 
-void Balloon::run()
+void Balloon::run(const float time)
 {
 	Vector2f mypos = getPosition();
 	float myradius = getRadius() * 2;

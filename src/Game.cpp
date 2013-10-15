@@ -90,11 +90,11 @@ bool Game::initBalloons()
 /**
  * Mise à jour des ballons
  */
-bool Game::updateBalloons()
+bool Game::updateBalloons(const float time)
 {
 	// Déplacements
     for (auto& balloon: balloons)
-        balloon.run();
+        balloon.run(time);
 
     // Collisions
     checkCollisions();
@@ -113,7 +113,7 @@ bool Game::checkCollisions()
     {
         Balloon& balloonSource = balloons[i];
 
-        for (unsigned int j = 0; j < _size; ++j)
+        for (unsigned int j = i+1; j < _size; ++j)
         {
             Balloon& balloonDest = balloons[j];
 
@@ -127,6 +127,8 @@ bool Game::checkCollisions()
                 balloonDest.move(balloonDest.getDirection());
             }
         }
+
+        Gui::window.draw(balloonSource);
     }
 }
 
@@ -136,17 +138,14 @@ bool Game::checkCollisions()
 bool Game::draw()
 {
     Gui::window.clear();
+    float time = clock.getElapsedTime().asSeconds();
 
     // Mise à jour et affichage de la GUI
-    Gui::update((int)clock.getElapsedTime().asSeconds());
+    Gui::update((int)time);
     Gui::draw();
 
     // Mise à jour des ballons
-    updateBalloons();
-
-    // Affichage des ballons
-    for (auto& balloon: balloons)
-        Gui::window.draw(balloon);
+    updateBalloons(time);
 
     Gui::window.display();
 
