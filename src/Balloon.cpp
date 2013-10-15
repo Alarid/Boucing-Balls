@@ -11,6 +11,7 @@ Balloon::Balloon (float posx,float posy,float radius,int sideGuiSize)
 	setFillColor(sf::Color::Green);
 	setOutlineColor(sf::Color::White);
 	setOutlineThickness(3);
+    setOrigin(radius,radius);
 	setPosition(posx, posy);
 
 	this->sideGuiSize = sideGuiSize;
@@ -49,7 +50,7 @@ bool Balloon::isCollided(float posx, float posy, float radius)const
 
 void Balloon::run(const float time)
 {
-	Vector2f mypos = getPosition();
+	/*Vector2f mypos = getPosition();
 	float myradius = getRadius() * 2;
 
 	// Si on est en contact ou qu'on a dépassé un des bords de l'écran, on inverse le déplacement
@@ -75,6 +76,35 @@ void Balloon::run(const float time)
     }
 
     move(direction.x*time*METTER_PER_SECOND, direction.y*time*METTER_PER_SECOND);
+    */
+
+	Vector2f future_pos(getPosition() + direction*(time*METTER_PER_SECOND));
+    float myradius = getRadius();
+
+	// Si on est en contact ou qu'on a dépassé un des bords de l'écran, on inverse le déplacement
+	if ((future_pos.x + myradius) >= (WIDTH-sideGuiSize))
+    {
+        direction.x = -direction.x;
+        future_pos.x = WIDTH-sideGuiSize - myradius;
+    }
+    else if (future_pos.x - myradius < 0)
+    {
+        direction.x = -direction.x;
+        future_pos.x = myradius;
+    }
+	
+    if (future_pos.y - myradius < 0)
+    {
+        direction.y = -direction.y;
+        future_pos.y = myradius;
+    }
+    else if ((future_pos.y + myradius) >= HEIGHT)
+    {
+        direction.y = -direction.y;
+        future_pos.y = HEIGHT - myradius;
+    }
+
+    setPosition(future_pos);
 }
 
 void Balloon::invertDirection()

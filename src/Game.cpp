@@ -64,8 +64,8 @@ bool Game::initBalloons()
         {
             found = false;
             size = random(30.f, MAX_SIZE);
-            posX = random(1.f, WIDTH-size*2);
-            posY = random(1.f, HEIGHT-size*2);
+            posX = random(1.f, WIDTH-size);
+            posY = random(1.f, HEIGHT-size);
 
             auto it = balloons.begin();
             while (it != balloons.end())
@@ -81,7 +81,7 @@ bool Game::initBalloons()
         } while (found && balloons.size() > 0);
 
         // On créé le ballon
-        balloons.push_back(Balloon(posX, posY, size, Gui::sideGui.getSize().x));
+        balloons.emplace_back(posX, posY, size, Gui::sideGui.getSize().x);
     }
 
     return true;
