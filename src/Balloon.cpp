@@ -1,80 +1,60 @@
 #include "Balloon.hpp"
+//#include <math.h>
+#include "random.hpp"
+
+#include "Gui.hpp"
 
 #include <iostream>
 
-using namespace std;
-using namespace sf;
 
-Balloon::Balloon (float posx,float posy,float radius,int sideGuiSize)
+Balloon::Balloon (float posx,float posy,float radius) : PhysObject((random(0,1)*2-1)*SPEED,(random(0,1)*2-1)*SPEED)
 {
-	setRadius(radius);
-	setFillColor(sf::Color::Green);
-	setOutlineColor(sf::Color::White);
-	setOutlineThickness(3);
-    setOrigin(radius,radius);
-	setPosition(posx, posy);
+    shape = new sf::CircleShape(radius);
 
-	this->sideGuiSize = sideGuiSize;
+	shape->setFillColor(sf::Color::Green);
+	shape->setOutlineColor(sf::Color::White);
+	shape->setOutlineThickness(3);
 
-	int dirx = rand() & 1;
-	int diry = rand() & 1;
-
-	direction.x = dirx ? SPEED : -SPEED;
-	direction.y = diry ? SPEED : -SPEED;
+    shape->setOrigin(radius,radius);
+	shape->setPosition(posx, posy);
 }
 
-bool Balloon::isClicked(int posX, int posY) const
+Balloon::~Balloon()
 {
-	return isCollided(posX,posY,0);
+    delete reinterpret_cast<sf::CircleShape*>(shape);
+}
+
+bool Balloon::isCollided(const PhysObject& other) const
+{
+    return other.isCollided(*this);
 }
 
 bool Balloon::isCollided(const Balloon& other) const
 {
-    const Vector2f& other_pos = other.getPosition();
-    return isCollided(other_pos.x,other_pos.y,other.getRadius());
+    const sf::Vector2f& other_pos = other.shape->getPosition();
+    return isCollided(other_pos.x,other_pos.y,reinterpret_cast<sf::CircleShape*>(other.shape)->getRadius());
+}
+
+bool Balloon::isCollided(float posx, float posy)const
+{
+    return isCollided(posx,posy,0);
 }
 
 bool Balloon::isCollided(float posx, float posy, float radius)const
 {
-	const Vector2f& pos = getPosition();
+	const sf::Vector2f& pos = shape->getPosition();
 	float xd = pos.x - posx;
 	float yd = pos.y - posy;
 
-    return sqrt(xd*xd + yd*yd) <= getRadius() + radius;
+    return sqrt(xd*xd + yd*yd) <= reinterpret_cast<sf::CircleShape*>(shape)->getRadius() + radius;
 }
 
-void Balloon::run(const float time)
+void Balloon::move(const float time)
 {
-	/*Vector2f mypos = getPosition();
-	float myradius = getRadius() * 2;
 
-	// Si on est en contact ou qu'on a dépassé un des bords de l'écran, on inverse le déplacement
-	if ((mypos.x + myradius) >= (WIDTH-sideGuiSize))
-    {
-        direction.x = -direction.x;
-        setPosition(Vector2f(WIDTH-myradius-sideGuiSize, getPosition().y));
-    }
-    else if (mypos.x <= 0)
-    {
-        direction.x = -direction.x;
-        setPosition(Vector2f(0, getPosition().y));
-    }
-	else if (mypos.y <= 0)
-    {
-        direction.y = -direction.y;
-        setPosition(Vector2f(getPosition().x, 0));
-    }
-    else if ((mypos.y + myradius) >= HEIGHT)
-    {
-        direction.y = -direction.y;
-        setPosition(Vector2f(getPosition().x, HEIGHT-myradius));
-    }
-
-    move(direction.x*time*METTER_PER_SECOND, direction.y*time*METTER_PER_SECOND);
-    */
-
-	Vector2f future_pos(getPosition() + direction*(time*METTER_PER_SECOND));
-    float myradius = getRadius();
+    sf::Vector2f future_pos(shape->getPosition() + direction*(time*METTER_PER_SECOND));
+    float myradius = reinterpret_cast<sf::CircleShape*>(shape)->getRadius();
+    auto sideGuiSize = Gui::sideGui.getSize().x;
 
 	// Si on est en contact ou qu'on a dépassé un des bords de l'écran, on inverse le déplacement
 	if ((future_pos.x + myradius) >= (WIDTH-sideGuiSize))
@@ -99,16 +79,5 @@ void Balloon::run(const float time)
         future_pos.y = HEIGHT - myradius;
     }
 
-    setPosition(future_pos);
+    shape->setPosition(future_pos);
 }
-
-void Balloon::invertDirection()
-{
-	direction.x = -direction.x;
-	direction.y = -direction.y;
-}
-
-const sf::Vector2f& Balloon::getDirection() const
-{
-    return this->direction;
-};

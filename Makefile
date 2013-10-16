@@ -15,10 +15,10 @@ all: $(EXEC)
 	$(CC) $(FLAGS) -o "$@" -c "$<"
 
 
-$(EXEC) : src/main.cpp src/Game.o src/Game.hpp src/Gui.o src/Gui.hpp src/Balloon.o src/Balloon.hpp src/defines.hpp src/random.hpp
+$(EXEC) : src/main.cpp src/Game.o src/Game.hpp src/Gui.o src/Gui.hpp src/Balloon.o src/Balloon.hpp src/defines.hpp src/random.hpp src/PhysObject.o src/PhysObject.hpp src/PhysEngine.o src/PhysEngine.hpp
 	$(CC) $^ $(FLAGS) -o $@
 
 
 clean:
-	@rm -f *.o
+	@rm -f src/*.o
 	@rm -f $(EXEC)

@@ -23,7 +23,6 @@ class Game
 		static bool checkCollisions();
 		static bool draw();
 
-		static std::vector<Balloon> balloons;
 		static sf::Clock clock;
 };
 
