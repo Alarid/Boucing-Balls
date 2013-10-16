@@ -14,6 +14,7 @@ class PhysEngine
         static int findAndRemove(float posx,float posy);
         static void add(PhysObject* obj);
         static bool isCollided(PhysObject* obj);
+        static void clear();
     private:
         static std::vector<PhysObject*> objects;
 

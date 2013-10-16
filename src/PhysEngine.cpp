@@ -14,7 +14,6 @@ void PhysEngine::nextStep(float time)
     for (unsigned int i=0; i<_size; ++i)
     {
         PhysObject& _1 = *objects[i];
-        bool is_collided = false;
 
         for (unsigned int j=i+1; j<_size; ++j)
         {
@@ -30,14 +29,18 @@ void PhysEngine::nextStep(float time)
                 cout << Angle(centerBalloonSource, collisionPoint) << endl;
                 */
 
-                is_collided = true;//evite d'inverser 2 fois
+                _1.direction = -_1.direction;
                 _2.direction = -_2.direction;
             }
         }
-        if(is_collided)
-            _1.direction = -_1.direction;
         _1.draw(Gui::window);
     }
+}
+
+void PhysEngine::clear()
+{
+    for(PhysObject* obj : objects)
+        delete obj;
 }
 
 int PhysEngine::findAndRemove(float x,float y)

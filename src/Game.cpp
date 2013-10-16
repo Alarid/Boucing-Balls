@@ -37,6 +37,7 @@ bool Game::run()
         draw();
     }
 
+    PhysEngine::clear();
     return true;
 }
 
@@ -72,7 +73,6 @@ bool Game::initBalloons()
             }
         }
     }
-
     return true;
 }
 
